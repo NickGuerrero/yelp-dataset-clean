@@ -16,9 +16,6 @@ def convertGeo(latString, longString):
     return '"location": {"type": "Point", "coordinates": [' + longString + ',' + latString +']}'
 
 def geoRepl(matchobj):
-    print(matchobj.group(0))
-    print(matchobj.group(1))
-    print(matchobj.group(2))
     return convertGeo(matchobj.group(1), matchobj.group(2))
 
 def replaceGeo(text):
