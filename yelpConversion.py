@@ -13,7 +13,7 @@ latitude: 1213.1
 location: {type: "Point", coordinates: [LO, LA] }
 '''
 def convertGeo(latString, longString):
-    return '"location": {"type": "Point", "coordinates": [' + longString + ',' + latString +']}'
+    return '"location": {"type": "Point", "coordinates": [' + longString + ',' + latString +']},'
 
 def geoRepl(matchobj):
     return convertGeo(matchobj.group(1), matchobj.group(2))
