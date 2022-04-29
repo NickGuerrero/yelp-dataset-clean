@@ -1,4 +1,5 @@
 import sys
+import re
 #import yelpConversion
 '''
 Convert two fields in a GeoJson object, replace fields
