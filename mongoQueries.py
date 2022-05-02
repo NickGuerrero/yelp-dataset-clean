@@ -12,7 +12,29 @@ myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["test"]
 mycol = mydb["yelpdata"]
 
+# We'll do the same for tips
 # Reviews need to grab user's names and update them
+# Tips do the same thing
+mydb = myclient["test"]
+review_col = mydb["review"]
+business_col = mydb["business"]
+user_col = mydb["user"]
+tips_col = mydb["tips"]
+
+# Go to tips and fetch business_id and user_id
+for doc in tips_col.find():
+	bus_name = business_col.find({"business_id": doc["business_id"]}, {"name": 1})["name"]
+	use_name = user_col.find({"user_id": doc["user_id"]}, {"name": 1})["name"]
+	tips_col.update({"_id": doc["_id"]}, {$set: {"business_name": bus_name, "user_name": use_name}})
+print("Finished updating tips")
+
+# Update review
+for doc in review_col.find():
+	bus_name = business_col.find({"business_id": doc["business_id"]}, {"name": 1})["name"]
+	use_name = user_col.find({"user_id": doc["user_id"]}, {"name": 1})["name"]
+	review_col.update({"_id": doc["_id"]}, {$set: {"business_name": bus_name, "user_name": use_name}})
+print("Finished updating reviews")
+
 
 # Embedding the check-in data
 # db.business.update({"business_id": BUSINESS_ID}, {$set: CHECK-IN-FIELD})
@@ -25,19 +47,3 @@ while(len(bus_id) > 0 and len(checkin_field) > 0):
     filter = {"business_id" : bus_id}
     new_val = json.loads(checkin_field)
     mycol.update_one(filter, new_val)
-
-
-'''
-Embedding reviews
-for each business_id
-	insert review into review array
-	//db.data.updateOne({}, {})
-
-Embedding check-ins
-for each business_id
-	insert array of check-ins
-	
-Embedding tips
-for each BLANK_id
-	insert array of tip objects
-'''
