@@ -1,10 +1,23 @@
 import re
+import json
 
 # Share with the ec2 instance
 # https://technoracle.com/copy-files-between-ec2-instances-easily/
 
 # Testing the regex pipeline
-DOCUMENT = ""
+DOCUMENT = '''
+{
+  "user_id": "qVc8ODYU5SZjKXVBgXdI7w",
+  "name": "Walker",
+  "review_count": 585,
+  "yelping_since": "2007-01-25 16:47:26",
+  "useful": 7217,
+  "funny": 1259,
+  "cool": 5994,
+  "elite": "2007",
+  "friends": "---, ---, ---, ---"
+}
+'''
 
 '''
 Convert two fields in a GeoJson object, replace fields
@@ -55,12 +68,11 @@ def convertDate(dateString):
 
 def dateRepl(matchobj):
     return convertDate(matchobj.group(0))
-    
+
 def replaceDate(text):
     return re.sub('"[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]\s[0-9][0-9]:[0-9][0-9]:[0-9][0-9]"', dateRepl, text)
 
-# In the document
-# DOCUMENT = re.sub('"[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]\s[0-9][0-9]:[0-9][0-9]:[0-9][0-9]"', dateRepl, DOCUMENT)
+DOCUMENT = replaceDate(DOCUMENT)
 
 '''
 Special date transform, only use on the check-in json
@@ -85,8 +97,47 @@ def replaceDateList(text):
 # In the document
 # DOCUMENT = re.sub('"date"\s*:\s*"(.*?)"', dateLRepl, DOCUMENT)
 
+'''
+Convert to special string for update script
+'''
 
-# print(DOCUMENT)
+def gridRepl(matchobj):
+    return '"' + matchobj.group(1) + '"\n{"date": [' + matchobj.group(2) + ']}'
+
+def replaceGrid(text):
+    # group1 is the business_id, group2 is the array
+    return re.sub('\s*{\s*"business_id"\s*:\s*"(.*?)"\s*,\s*"date"\s*:\s*\[(.*?)\]\s*}', gridRepl, text)
+
+# DOCUMENT = replaceGrid(DOCUMENT)
+
+'''''''''
+
+'''''''''
+def convertFriendList(friendListString):
+    tmp = friendListString.split(",")
+    for i in range(len(tmp)):
+        tmp[i] = tmp[i].strip()
+    return '"friends": ["' + '","'.join(tmp) + '"]'
+
+def dateFriendRepl(matchobj):
+    return convertFriendList(matchobj.group(1))
+
+def replaceFriendList(text):
+    return re.sub('"friends"\s*:\s*"(.*?)"', dateFriendRepl, DOCUMENT)
+
+DOCUMENT = replaceFriendList(DOCUMENT)
+
+print(DOCUMENT)
+
+'''
+x = DOCUMENT.split("\n")
+
+z = json.loads(x[1])
+
+print(z)
+
+type(z)
+'''
 # MongoDB tasks
 '''
 Convert check-in from string of dates to array of date objects
