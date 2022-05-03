@@ -57,9 +57,11 @@ if flags[2]:
     bus_id = checkin_ptr.readline()
     checkin_field = checkin_ptr.readline()
     while(len(bus_id) > 0 and len(checkin_field) > 0):
+        print(bus_id)
         filter = {"business_id" : bus_id}
         new_val = json.loads(checkin_field)
         content = {"$set": new_val}
+        print(content)
         mycol.update_one(filter, content)
         bus_id = checkin_ptr.readline()
         if len(bus_id) > 0:
