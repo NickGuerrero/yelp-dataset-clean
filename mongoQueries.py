@@ -31,7 +31,7 @@ if flags[0]:
         try:
             bus_name = business_col.find({"business_id": doc["business_id"]}, {"name": 1})["name"]
             use_name = user_col.find({"user_id": doc["user_id"]}, {"name": 1})["name"]
-            tips_col.update({"_id": doc["_id"]}, {$set: {"business_name": bus_name, "user_name": use_name}})
+            tips_col.update_one({"_id": doc["_id"]}, {"$set": {"business_name": bus_name, "user_name": use_name}})
         except:
             print("bad query on tips")
     print("Finished updating tips")
@@ -42,7 +42,7 @@ if flags[1]:
         try:
             bus_name = business_col.find({"business_id": doc["business_id"]}, {"name": 1})["name"]
             use_name = user_col.find({"user_id": doc["user_id"]}, {"name": 1})["name"]
-            review_col.update({"_id": doc["_id"]}, {$set: {"business_name": bus_name, "user_name": use_name}})
+            review_col.update_one({"_id": doc["_id"]}, {"$set": {"business_name": bus_name, "user_name": use_name}})
         except:
             print("bad query on review")
     print("Finished updating reviews")
