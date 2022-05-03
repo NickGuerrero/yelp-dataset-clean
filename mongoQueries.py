@@ -61,3 +61,7 @@ if flags[2]:
         new_val = json.loads(checkin_field)
         content = {"$set": new_val}
         mycol.update_one(filter, content)
+        bus_id = checkin_ptr.readline()
+        if(len(bus_id) > 0:
+            checkin_field = checkin_ptr.readline()
+        
