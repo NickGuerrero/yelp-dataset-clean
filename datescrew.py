@@ -21,7 +21,7 @@ def dateRepl(matchobj):
 
 def replaceDate(text):
     #return re.sub('"[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]\s[0-9][0-9]:[0-9][0-9]:[0-9][0-9]"', dateRepl, text)
-    return re.sub('{\s*"$date"\s*:\s*{\s*"[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]"', dateRepl, text)
+    return re.sub('{\s*"$date"\s*:\s*"[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]"', dateRepl, text)
 
 file_loc = sys.argv[1]  # yelp_academic_dataset_tip.json
 file_to = sys.argv[2] # cleaned_*.json
