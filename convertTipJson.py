@@ -1,5 +1,6 @@
 import sys
-import yelpConversion
+# import yelpConversion
+import re
 
 # We may need to change the friends field
 # User & Review

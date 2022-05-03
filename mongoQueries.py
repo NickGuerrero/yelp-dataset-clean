@@ -8,7 +8,8 @@ business and user datasets in the database
 '''
 
 # Change according to what parts to need to run
-flags = [True, True, True]
+# We're starting with the checkin queries
+flags = [False, False, True]
 
 # MongoDB Querying
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
