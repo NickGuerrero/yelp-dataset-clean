@@ -52,6 +52,7 @@ if flags[1]:
 # db.business.update({"business_id": BUSINESS_ID}, {$set: CHECK-IN-FIELD})
 if flags[2]:
     x = 0
+    bad_queries = 0
     mydb = myclient["test"]
     mycol = mydb["business"]
     checkin_ptr = open("cleaned_checkin.txt", "r")
@@ -60,11 +61,18 @@ if flags[2]:
     while(len(bus_id) > 0 and len(checkin_field) > 0):
         x += 1
         if(x % 10 == 0):
+            bad_queries = 0
             print(bus_id)
         filter = {"business_id" : bus_id}
         new_val = json.loads(checkin_field)
         content = {"$set": new_val}
-        mycol.update_one(filter, content)
+        res = mycol.update_one(filter, content)
+        if res.matched_count <= 0:
+            bad_queries += 1
+            if bad_queries > 8:
+                print("Queries are not being processed")
+        
+        # Iterate
         bus_id = checkin_ptr.readline().rstrip('\n')
         if len(bus_id) > 0:
             checkin_field = checkin_ptr.readline()
