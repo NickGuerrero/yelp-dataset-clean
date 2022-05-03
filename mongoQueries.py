@@ -7,6 +7,9 @@ Run this AFTER cleaning up the data files and inserting
 business and user datasets in the database
 '''
 
+# Change according to what parts to need to run
+flags = [True, True, True]
+
 # MongoDB Querying
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["test"]
@@ -22,28 +25,37 @@ user_col = mydb["user"]
 tips_col = mydb["tips"]
 
 # Go to tips and fetch business_id and user_id
-for doc in tips_col.find():
-	bus_name = business_col.find({"business_id": doc["business_id"]}, {"name": 1})["name"]
-	use_name = user_col.find({"user_id": doc["user_id"]}, {"name": 1})["name"]
-	tips_col.update({"_id": doc["_id"]}, {$set: {"business_name": bus_name, "user_name": use_name}})
-print("Finished updating tips")
+if flags[0]:
+    for doc in tips_col.find():
+        try:
+            bus_name = business_col.find({"business_id": doc["business_id"]}, {"name": 1})["name"]
+            use_name = user_col.find({"user_id": doc["user_id"]}, {"name": 1})["name"]
+            tips_col.update({"_id": doc["_id"]}, {$set: {"business_name": bus_name, "user_name": use_name}})
+        except:
+            print("bad query on tips")
+    print("Finished updating tips")
 
 # Update review
-for doc in review_col.find():
-	bus_name = business_col.find({"business_id": doc["business_id"]}, {"name": 1})["name"]
-	use_name = user_col.find({"user_id": doc["user_id"]}, {"name": 1})["name"]
-	review_col.update({"_id": doc["_id"]}, {$set: {"business_name": bus_name, "user_name": use_name}})
-print("Finished updating reviews")
+if flags[1]:
+    for doc in review_col.find():
+        try:
+            bus_name = business_col.find({"business_id": doc["business_id"]}, {"name": 1})["name"]
+            use_name = user_col.find({"user_id": doc["user_id"]}, {"name": 1})["name"]
+            review_col.update({"_id": doc["_id"]}, {$set: {"business_name": bus_name, "user_name": use_name}})
+        except:
+            print("bad query on review")
+    print("Finished updating reviews")
 
 
 # Embedding the check-in data
 # db.business.update({"business_id": BUSINESS_ID}, {$set: CHECK-IN-FIELD})
-mydb = myclient["test"]
-mycol = mydb["business"]
-checkin_ptr = open("cleaned_checkin.txt", "r")
-bus_id = checkin_ptr.readline()
-checkin_field = checkin_ptr.readline()
-while(len(bus_id) > 0 and len(checkin_field) > 0):
-    filter = {"business_id" : bus_id}
-    new_val = json.loads(checkin_field)
-    mycol.update_one(filter, new_val)
+if flags[2]:
+    mydb = myclient["test"]
+    mycol = mydb["business"]
+    checkin_ptr = open("cleaned_checkin.txt", "r")
+    bus_id = checkin_ptr.readline()
+    checkin_field = checkin_ptr.readline()
+    while(len(bus_id) > 0 and len(checkin_field) > 0):
+        filter = {"business_id" : bus_id}
+        new_val = json.loads(checkin_field)
+        mycol.update_one(filter, new_val)
