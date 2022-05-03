@@ -59,4 +59,5 @@ if flags[2]:
     while(len(bus_id) > 0 and len(checkin_field) > 0):
         filter = {"business_id" : bus_id}
         new_val = json.loads(checkin_field)
-        mycol.update_one(filter, new_val)
+        content = {"$set": new_val}
+        mycol.update_one(filter, content)
