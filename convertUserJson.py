@@ -19,7 +19,7 @@ def dateFriendRepl(matchobj):
     return convertFriendList(matchobj.group(1))
 
 def replaceFriendList(text):
-    return re.sub('"friends"\s*:\s*"(.*?)"', dateFriendRepl, DOCUMENT)
+    return re.sub('"friends"\s*:\s*"(.*?)"', dateFriendRepl, text)
 
 # We may need to change the friends field
 # Friends need to be changed from string to array of strings
@@ -57,8 +57,12 @@ def replaceDate(text):
 
 file_loc = sys.argv[1]  # yelp_academic_dataset_user.json
 file_to = sys.argv[2] # cleaned_*.json
+x = 0
 with open(file_loc, "r") as source:
     dest = open(file_to, "w")
     for line in source:
+        x += 1
         text = replaceFriendList(replaceDate(line))
+        if(x == 0 || x == 2):
+            print(text)
         dest.write(text)

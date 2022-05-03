@@ -50,6 +50,10 @@ if flags[1]:
 
 # Embedding the check-in data
 # db.business.update({"business_id": BUSINESS_ID}, {$set: CHECK-IN-FIELD})
+
+# Last Updated: OWOOc0YjU_kioLeEgo5VCA
+# Note: As is, Ctrl+C will NOT terminate the script, please consider changing to specific errors
+
 if flags[2]:
     x = 0
     bad_queries = 0
@@ -59,26 +63,22 @@ if flags[2]:
     bus_id = checkin_ptr.readline().rstrip('\n').strip('"')
     checkin_field = checkin_ptr.readline()
     while(len(bus_id) > 0 and len(checkin_field) > 0):
-        try:
-            x += 1
-            if(x % 10 == 0):
-                bad_queries = 0
-                print(bus_id)
-            filter = {"business_id" : bus_id}
-            new_val = json.loads(checkin_field)
-            content = {"$set": new_val}
-            res = mycol.update_one(filter, content)
-            if res.matched_count <= 0:
-                bad_queries += 1
-                if bad_queries > 8:
-                    print("Queries are not being processed")
-        except:
-            print("Serious Error. Check queries")
-        finally:
-            # Iterate
-            bus_id = checkin_ptr.readline().rstrip('\n').strip('"')
-            if len(bus_id) > 0:
-                checkin_field = checkin_ptr.readline()
-            else:
-                checkin_field = ""
+        x += 1
+        if(x % 10 == 0):
+            bad_queries = 0
+            print(bus_id)
+        filter = {"business_id" : bus_id}
+        new_val = json.loads(checkin_field)
+        content = {"$set": new_val}
+        res = mycol.update_one(filter, content)
+        if res.matched_count <= 0:
+            bad_queries += 1
+            if bad_queries > 8:
+                print("Queries are not being processed")
+        # Iterate
+        bus_id = checkin_ptr.readline().rstrip('\n').strip('"')
+        if len(bus_id) > 0:
+            checkin_field = checkin_ptr.readline()
+        else:
+            checkin_field = ""
         
