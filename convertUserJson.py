@@ -63,6 +63,6 @@ with open(file_loc, "r") as source:
     for line in source:
         x += 1
         text = replaceFriendList(replaceDate(line))
-        if(x == 0 || x == 2):
+        if(x == 0 or x == 2):
             print(text)
         dest.write(text)
