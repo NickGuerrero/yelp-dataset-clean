@@ -58,5 +58,5 @@ with open(file_loc, "r") as source:
     dest = open(file_to, "w")
     for line in source:
         text = replaceDateList(line)
-        text = replaceGrid(line)
+        text = replaceGrid(text)
         dest.write(text)
