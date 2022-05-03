@@ -1,6 +1,7 @@
 import pymongo
 import re
 import json
+import datetime
 
 '''
 Run this AFTER cleaning up the data files and inserting
@@ -69,6 +70,11 @@ if flags[2]:
             print(bus_id)
         filter = {"business_id" : bus_id}
         new_val = json.loads(checkin_field)
+        # Convert from canonical json to ISODate
+        for i in range(len(new_val['check-in'])):
+            crt = re.split('-|T|:', new_val['check-in'][i]['$date'])
+            ins = datetime.datetime(int(crt[0]), int(crt[1]), int(crt[2]), int(crt[3]), int(crt[4]), int(crt[5]))
+            new_val['check-in'][i] = ins        
         content = {"$set": new_val}
         res = mycol.update_one(filter, content)
         if res.matched_count <= 0:
