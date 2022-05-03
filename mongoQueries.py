@@ -10,7 +10,7 @@ business and user datasets in the database
 
 # Change according to what parts to need to run
 # We're starting with the checkin queries
-flags = [False, False, True]
+flags = [False, False, False]
 
 # MongoDB Querying
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -53,6 +53,7 @@ if flags[1]:
 # db.business.update({"business_id": BUSINESS_ID}, {$set: CHECK-IN-FIELD})
 
 # Last Updated: OWOOc0YjU_kioLeEgo5VCA
+# Last Update: iyrC0B8Gr8DcJURMJFOAKw
 # Note: As is, Ctrl+C will NOT terminate the script, please consider changing to specific errors
 
 if flags[2]:
