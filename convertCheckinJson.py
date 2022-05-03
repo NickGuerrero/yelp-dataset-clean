@@ -22,7 +22,7 @@ def dateLRepl(matchobj):
     return convertDateList(matchobj.group(1))
 
 def replaceDateList(text):
-    return re.sub('"date"\s*:\s*"(.*?)"', dateLRepl, DOCUMENT)
+    return re.sub('"date"\s*:\s*"(.*?)"', dateLRepl, text)
 
 '''
 Convert to special string for update script
