@@ -51,19 +51,21 @@ if flags[1]:
 # Embedding the check-in data
 # db.business.update({"business_id": BUSINESS_ID}, {$set: CHECK-IN-FIELD})
 if flags[2]:
+    x = 0
     mydb = myclient["test"]
     mycol = mydb["business"]
     checkin_ptr = open("cleaned_checkin.txt", "r")
-    bus_id = checkin_ptr.readline()
+    bus_id = checkin_ptr.readline().rstrip('\n')
     checkin_field = checkin_ptr.readline()
     while(len(bus_id) > 0 and len(checkin_field) > 0):
-        print(bus_id)
+        x += 1
+        if(x % 10 == 0):
+            print(bus_id)
         filter = {"business_id" : bus_id}
         new_val = json.loads(checkin_field)
         content = {"$set": new_val}
-        print(content)
         mycol.update_one(filter, content)
-        bus_id = checkin_ptr.readline()
+        bus_id = checkin_ptr.readline().rstrip('\n')
         if len(bus_id) > 0:
             checkin_field = checkin_ptr.readline()
         else:
